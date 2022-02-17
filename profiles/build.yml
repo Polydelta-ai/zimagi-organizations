@@ -33,7 +33,7 @@ run:
         module_template: data/model
         template_fields:
             name: "@data_name"
-            id_fields: name
+            id_fields: [ name, city, state, zipcode ]
             key: id
             admin_roles: "@{data_name}-admin"
             view_roles: public
