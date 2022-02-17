@@ -1,0 +1,51 @@
+config:
+    module_name: organizations
+    data_name: organization
+
+pre_run:
+    data_fields:
+        _config:
+            parent:
+                type: foreign_key
+                options:
+                    related_data_name: "@data_name"
+            city:
+                type: string
+            state:
+                type: string
+            zipcode:
+                type: string
+                options:
+                    max_length: 10
+
+run:
+    admin_role:
+        _command: template generate
+        module_name: "@module_name"
+        module_template: user/role
+        template_fields:
+            name: "@{data_name}-admin"
+            help: "#capitalize(@data_name) administrator"
+
+    organization_model:
+        _command: template generate
+        module_name: "@module_name"
+        module_template: data/model
+        template_fields:
+            name: "@data_name"
+            id_fields: name
+            key: id
+            admin_roles: "@{data_name}-admin"
+            view_roles: public
+            resource_priority: 50
+
+    "<<dict_key>>_field":
+        _command: template generate
+        _requires: organization_model
+        _foreach: "@data_fields"
+        module_name: "@module_name"
+        module_template: "field/<<type>>"
+        template_fields:
+            data_name: "@data_name"
+            field_name: "<<dict_key>>"
+            "<<options>>":
