@@ -16,7 +16,7 @@ pre_run:
             zipcode:
                 type: string
                 options:
-                    max_length: 10
+                    max_length: 20
 
 run:
     admin_role:

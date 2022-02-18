@@ -33,7 +33,11 @@ data:
   organization:
     class: Organization
     base: id_resource
-    id_fields: name
+    id_fields:
+    - name
+    - city
+    - state
+    - zipcode
     key: id
     roles:
       edit: organization-admin
@@ -64,10 +68,13 @@ data:
         options:
           'null': true
           default: null
-          max_length: 10
+          max_length: 20
     meta:
       unique_together:
       - name
+      - city
+      - state
+      - zipcode
       ordering:
       - id
 command_mixins:
