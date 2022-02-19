@@ -142,8 +142,8 @@ response = api.execute('organization.list')
 results = api.list('organization', name__icontains = "federal")
 
 # Return field collections in various formats
-results = api.json('organization', fields = ['name', 'city', 'state'])
-results = api.csv('organization', fields = ['name', 'zipcode'])
+json_results = api.json('organization', fields = ['name', 'city', 'state'])
+df = api.dataframe('organization', fields = ['name', 'zipcode'])
 
 # Access organization data
 data = api.get('organization', "{key}")
