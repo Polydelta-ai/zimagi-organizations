@@ -133,6 +133,10 @@ api.extend('https://github.com/Polydelta-ai/zimagi-organizations.git', 'main',
 # * dot separated strings   "user.list"
 #
 response = api.execute('organization.list')
+#
+# OR
+#
+response = api.organization__list() # __ converted to /
 
 #
 # Organization SDK interface
