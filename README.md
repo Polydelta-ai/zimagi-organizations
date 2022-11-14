@@ -186,8 +186,8 @@ data_api.create('organization',
 results = data_api.list('organization', name__icontains = "federal")
 
 # Return field collections in various formats
-json_results = data_api.json('organization', fields = ['name', 'city', 'state'])
-df = data_api.csv('organization', fields = ['name', 'zipcode'])
+json_results = data_api.json('organization', fields = ['name', 'location__city', 'location__state'])
+df = data_api.csv('organization', fields = ['name', 'location__zipcode'])
 
 # Access organization data
 data = data_api.get('organization', "{key}")
