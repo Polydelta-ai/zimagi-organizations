@@ -44,6 +44,7 @@ data:
     base: id_resource
     mixins:
     - location_optional
+    key: id
     api: true
     display: <name>
     roles:
@@ -61,4 +62,6 @@ data:
           on_delete: '@django.SET_NULL'
           editable: true
           system: false
-    meta: null
+    meta:
+      ordering:
+      - id

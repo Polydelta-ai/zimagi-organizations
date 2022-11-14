@@ -1,5 +1,6 @@
 _base_model: &base_model
     base: id_resource
+    key: id
     admin_roles: [ organization-admin ]
     view_roles: [ organization-auditor ]
     priority: 60
@@ -12,7 +13,6 @@ models:
     location:
         <<: *base_model
         id_fields: [ city, state, zipcode ]
-        key: id
         name_field: false
         display: "<city>, <state> <zipcode>"
         fields:
