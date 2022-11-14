@@ -1,14 +1,21 @@
-config:
-    module_name: organizations
-    data_name: organization
+_base_model: &base_model
+    base: id_resource
+    admin_roles: [ organization-admin ]
+    view_roles: [ organization-auditor ]
+    priority: 60
 
-pre_run:
-    data_fields:
-        _config:
-            parent:
-                type: foreign_key
-                options:
-                    related_data_name: "@data_name"
+roles:
+    organization-admin: Organization administrator (full privileges over all organizations)
+    organization-auditor: Organization auditor (viewing privileges over all organizations)
+
+models:
+    location:
+        <<: *base_model
+        id_fields: [ city, state, zipcode ]
+        key: id
+        name_field: false
+        display: "<city>, <state> <zipcode>"
+        fields:
             city:
                 type: string
             state:
@@ -18,34 +25,13 @@ pre_run:
                 options:
                     max_length: 20
 
-run:
-    admin_role:
-        _command: template generate
-        module_name: "@module_name"
-        module_template: user/role
-        template_fields:
-            name: "@{data_name}-admin"
-            help: "#capitalize(@data_name) administrator"
-
-    organization_model:
-        _command: template generate
-        module_name: "@module_name"
-        module_template: data/model
-        template_fields:
-            name: "@data_name"
-            id_fields: [ name, city, state, zipcode ]
-            key: id
-            admin_roles: "@{data_name}-admin"
-            view_roles: public
-            resource_priority: 50
-
-    "<<dict_key>>_field":
-        _command: template generate
-        _requires: organization_model
-        _foreach: "@data_fields"
-        module_name: "@module_name"
-        module_template: "field/<<type>>"
-        template_fields:
-            data_name: "@data_name"
-            field_name: "<<dict_key>>"
-            "<<options>>":
+    organization:
+        <<: *base_model
+        display: "<name>"
+        mixins: [ location_optional ]
+        priority: 65
+        fields:
+            parent:
+                type: foreign_key
+                options:
+                    related_data_name: organization
