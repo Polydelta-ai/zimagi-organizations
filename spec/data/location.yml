@@ -1,0 +1,89 @@
+data_mixins:
+  location:
+    class: LocationMixin
+    fields:
+      location:
+        type: '@django.ForeignKey'
+        relation: location
+        options:
+          on_delete: '@django.PROTECT'
+  location_optional:
+    class: LocationOptionalMixin
+    fields:
+      location:
+        type: '@django.ForeignKey'
+        relation: location
+        options:
+          on_delete: '@django.SET_NULL'
+          'null': true
+  locations:
+    class: LocationMultipleMixin
+    fields:
+      locations:
+        type: '@django.ManyToManyField'
+        relation: location
+        options:
+          blank: true
+data_base:
+  location:
+    class: LocationBase
+    base: id_resource
+    mixins:
+    - location
+    id_fields:
+    - location_id
+    - name
+    meta:
+      unique_together:
+      - location
+      - name
+      scope: location
+data:
+  location:
+    class: Location
+    base: id_resource
+    id_fields:
+    - city
+    - state
+    - zipcode
+    key: id
+    api: true
+    display: <city>, <state> <zipcode>
+    roles:
+      edit:
+      - organization-admin
+      view:
+      - organization-auditor
+    fields:
+      name: null
+      state:
+        type: '@django.CharField'
+        options:
+          'null': true
+          default: null
+          max_length: 256
+          editable: true
+          system: false
+      zipcode:
+        type: '@django.CharField'
+        options:
+          'null': true
+          default: null
+          max_length: 20
+          editable: true
+          system: false
+      city:
+        type: '@django.CharField'
+        options:
+          'null': true
+          default: null
+          max_length: 256
+          editable: true
+          system: false
+    meta:
+      unique_together:
+      - city
+      - state
+      - zipcode
+      ordering:
+      - id

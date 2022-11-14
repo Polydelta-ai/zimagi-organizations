@@ -1,0 +1,64 @@
+data_mixins:
+  organization:
+    class: OrganizationMixin
+    fields:
+      organization:
+        type: '@django.ForeignKey'
+        relation: organization
+        options:
+          on_delete: '@django.PROTECT'
+  organization_optional:
+    class: OrganizationOptionalMixin
+    fields:
+      organization:
+        type: '@django.ForeignKey'
+        relation: organization
+        options:
+          on_delete: '@django.SET_NULL'
+          'null': true
+  organizations:
+    class: OrganizationMultipleMixin
+    fields:
+      organizations:
+        type: '@django.ManyToManyField'
+        relation: organization
+        options:
+          blank: true
+data_base:
+  organization:
+    class: OrganizationBase
+    base: id_resource
+    mixins:
+    - organization
+    id_fields:
+    - organization_id
+    - name
+    meta:
+      unique_together:
+      - organization
+      - name
+      scope: organization
+data:
+  organization:
+    class: Organization
+    base: id_resource
+    mixins:
+    - location_optional
+    api: true
+    display: <name>
+    roles:
+      edit:
+      - organization-admin
+      view:
+      - organization-auditor
+    fields:
+      parent:
+        type: '@django.ForeignKey'
+        relation: organization
+        color: relation
+        options:
+          'null': true
+          on_delete: '@django.SET_NULL'
+          editable: true
+          system: false
+    meta: null
